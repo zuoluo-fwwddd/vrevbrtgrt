@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>正在通过安全验证..</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--    <script src="https://code.jquery.com/jquery-3.7.1.js" type="text/javascript"></script>-->
+    <style type="text/css">
+
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #eee;
+        }
+        .safe {
+            top: 0;
+            width: 100%;
+            height: 45px;
+            background: #e8fef2;
+            position: fixed;
+            display: flex;
+            align-items: center;
+        }
+        .safe .icon {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IArs4c6QAAAsxJREFUSEu9lUtoE1EUhv8zTWagqVVRN1U0m6qLSlHERbWZdOVKpCCC1DpJikVFXam4UCiCiO7EFyrUGUsXIrpx4WPTSRPBRRWKICqK3ZQuRMgm1DvJzJEZkjaPqZn46N3de8/5v3Pv+e8MYZkGLRMHzYEYpEwmTgMcFhHlOnbeKwQttCmQbCYuEuGSK87AVUvVz/9zUDiT6ibbniKikAdiLlKopUvsGf0UBOZ7IsVMnAXhWhCBuhjmWRE3NtSu14MmDq1VJOX7H0FKScLBavTpuUqNetDroU1K0Z75K9Aquw3dY/n/DwrnW9HzeP63ICVzZDMcyWswgz8TaK4ioRNAhzdnngXRl/IeAx0EuPsQDUFTwyvlvJgg0PaShd9bzswO9JlFdx5OJzUJrJeKOGypxrgHmoiHZCn6joBtpbxRKxY9ChpxyoUs9mh6MCLnpEwZslgpX7ZU44I3z6ZWyLbzAwzbYq/hP91lOZ24QkD1m2J+Lta396PzhnBjFkCyqZ0joqu1JmDAYYl3FXqNt56oqT0DaN6K6wfdeSid7JHgZAlUZyyHkCzEdO8GFjbDpnZcIrrt6zbmr4Kpyz1B2EwMEiFvqfpTTA9GlJz0AaCNfnkOOacKsYc3q0CYGm6V88KtzOtP/eBbQjVO4s1AO0KRefc7p6S1uwAN+8fjpQjn+8vuqz6uZwYrU25qrYAtoa/Yq5velU0m97Ywv/CvCfeFGj3mb4ZShpJNbYHtfFziVHNCKW5FgVsUR3afwDq/uMb2drMafBkYPA5QGwH7l7iyAO8oAGgp8cr1YCfKpjoU25kNIuhrGUbOUqNrKvtT7bqKLCWtZQHa3TSMMcMSn7FixpPa3GB/WAbJk9oYgQaqBJjviLhxIkhBwUCuEo9IcvrbIyI64E2ZH1iqMQRy/+qNR3BQ2f5mYp9NLIqq8aqx/GJE06BmxCtjlw30CwlNGCoAzsHMAAAAAElFTkSuQmCC) no-repeat;
+            width: 26px;
+            height: 26px;
+            margin: 0 10px;
+        }
+        .safe .text {
+            flex: 1;
+            align-items: center;
+            color: rgba(7, 193, 96);
+            font-size: 15px;
+        }
+
+        .content {
+            max-width: 800px;
+            width: calc(100% - 20px);
+            margin: 0 auto;
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            line-height: 1;
+        }
+        .is_safe {
+            margin-top: 55px;
+        }
+        .title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+        .detail {
+            text-align: center;
+            word-wrap: break-word;
+        }
+        .img {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:link img, a:visited img, a:hover img, a:active img {
+            text-decoration: none;
+            outline: none;
+        }
+        a img {
+            border: none;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #loading-animation {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 100px;
+            height: 100px;
+            margin: auto;
+            background-color: pink;
+            animation-name: spin;
+            animation-duration: 3s;
+            border-radius: 50%;
+            text-align: center;
+            display: flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .color-change {
+            border: 1px solid red;
+        }
+        .text{width:100%;flex:1;height:45px;color:rgba(7,193,96);font-size:15px;line-height:45px}
+        .round-button {
+            background-color: rgba(7, 193, 96); /* Green */
+            border: none;
+            color: white;
+            padding: 16px 40px; /* 增加按钮的内边距，使文字更大 */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px; /* 增大文字的大小 */
+            margin: 4px 24px;
+            cursor: pointer;
+            border-radius: 25px; /* 圆角的大小 */
+            transition: background-color 0.3s, transform 0.3s; /* 平滑过渡效果 */
+            animation: breathe 1.5s infinite; /* 呼吸跳动效果 */
+            white-space: pre-wrap;
+        }
+
+        .round-button:hover {
+            background-color: rgba(8, 193, 96); /* 悬停时的颜色 */
+        }
+
+        /* 定义呼吸跳动效果的关键帧 */
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="no4" style="font-size: 24px;display: none;">
+    <img  src="" id="imgsrc4"  alt=""/>
+</div>
+<div id="no2" style="font-size: 24px;">
+</div>
+<div id="no1" style="display: none;">
+    <div class="safe" style="display: none;" id="isaq">
+        <div class="icon"></div>
+        <div class="text">二维码已通过安全验证</div>
+    </div>
+    <div class="content is_safe" id="myButton" >
+        <div class="title" id="avtiveCodeTitle"></div>
+        <div class="img">
+            <a style="cursor:pointer;display: none;" id="skipa"  >
+                <img  src="" id="imgsrc"  alt=""/>
+            </a>
+
+            <div id="skipa2" style="display: none;">
+                <img  src="" id="imgsrc2"  alt=""/>
+            </div>
+        </div>
+        <div class="detail" id="skipContent"></div>
+        <div id="imgbox" style="text-align:center;margin-top: 10px;display: none;" >
+            <a href="weixin://" class="round-button" id="imgboxcontent"></a>
+            <br/><br/>
+        </div>
+    </div>
+
+
+</div>
+
+<script   type="text/javascript">
+
+
+    var aotuskipSecond='';
+    var avtiveWuxianCodeId='';
+    var skipAddress='';
+    var jid='';
+    const addr='https://suolan.xn--sxqt1aj3dc3eeu3byzv.cn';
+    const addr2='https://wx97.xn--cct53cg6ny0a78oc8l.cn';
+    const addr3='https://udyc.wx920.cc';
+    const urlParams = new URLSearchParams(window.location.search);
+    var xxd = noensureAbsoluteUrl(location.origin+location.pathname)
+    const code = urlParams.get('w');
+    if (!code || code.trim() === '') {
+        document.body.innerHTML = '无有效参数';
+    } else {
+        const xhr = new XMLHttpRequest();
+        const url = addr+'/newtesaj?w='+code+'&x='+xxd;
+        xhr.open('GET', url, true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    const x = JSON.parse(xhr.responseText);
+                    if (x.no == "1") {
+                        if(x.s.avtiveCodeBrowserTitle==null ||x.s.avtiveCodeBrowserTitle==''){
+                            document.title ="\u200E";
+                        }else{
+                            document.title = x.s.avtiveCodeBrowserTitle;
+                        }
+                        if(x.b.jid!=null){
+                            jid=x.b.jid
+                        }
+                        avtiveWuxianCodeId=x.s.avtiveWuxianCodeId
+                        aotuskipSecond = x.s.aotuskipSecond
+                        skipAddress = x.b.skipAddress
+                        if(aotuskipSecond>=0){
+                            delayURL();
+                        }
+                        if(x.s.aotuskipSecond==0){
+                            return;
+                        }
+                        if(x.s.clickImgSkip==0){
+                            if(x.b.skipImg!=null){
+                                if(x.b.skipImg!=''){
+                                    if(x.b.skipAddress==null){
+                                        document.getElementById("skipa2").style.display = "block";
+                                        document.getElementById("imgsrc2").src = x.b.skipImg;
+                                    }else if(x.b.skipAddress.trim()==''){
+                                        document.getElementById("skipa2").style.display = "block";
+                                        document.getElementById("imgsrc2").src = x.b.skipImg;
+                                    }else{
+                                        document.getElementById("skipa").style.display = "block";
+                                        document.getElementById('skipa').onclick = function() {
+                                            cl(x.s.avtiveWuxianCodeId,x.b.skipAddress);
+                                        };
+                                        document.getElementById("imgsrc").src = x.b.skipImg;
+                                    }
+                                }
+                            }
+
+                        }else  if(x.s.clickImgSkip==1){
+                            if(x.b.skipImg!=null){
+                                if(x.b.skipImg!=''){
+                                    document.getElementById("skipa2").style.display = "block";
+                                    document.getElementById("imgsrc2").src = x.b.skipImg;
+                                }
+                            }
+                        }
+                        document.getElementById("avtiveCodeTitle").innerHTML =x.s.avtiveCodeTitle
+                        document.getElementById("skipContent").innerHTML =x.b.skipContent
+                        document.getElementById("no1").style.display = "block";
+                        if(x.s.isopenwx=='0'){
+                            document.getElementById("imgbox").style.display = "block";
+                            document.getElementById("imgboxcontent").innerHTML = x.s.wxcontent;
+                        }
+                        if(x.s.showSecurity=='0'){
+                            document.getElementById("isaq").style.display = "flex";
+                        }
+                    }else if (x.no == "4") {
+                        document.title ="在浏览器中打开";
+                        document.getElementById("no4").style.display = "block";
+                        document.getElementById("imgsrc4").src = 'https://ddss-1328831572.cos.accelerate.myqcloud.com/photo_2024-10-10_15-34-41.jpg';
+                    }else  {
+                        document.getElementById("no2").innerHTML = x.msg;
+                    }
+
+                }
+                else{
+                    if(addr2!=''){
+                        const xhr = new XMLHttpRequest();
+                        const url = addr2+'/newtesaj?w=' + code+'&x='+xxd;
+                        xhr.open('GET', url, true);
+                        xhr.send();
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    const x = JSON.parse(xhr.responseText);
+                                    if (x.no == "1") {
+                                        if(x.s.avtiveCodeBrowserTitle==null ||x.s.avtiveCodeBrowserTitle==''){
+                                            document.title ="\u200E";
+                                        }else{
+                                            document.title = x.s.avtiveCodeBrowserTitle;
+                                        }
+
+                                        avtiveWuxianCodeId=x.s.avtiveWuxianCodeId
+                                        aotuskipSecond = x.s.aotuskipSecond
+                                        skipAddress = x.b.skipAddress
+                                        if(x.b.jid!=null){
+                                            jid=x.b.jid
+                                        }
+                                        if(aotuskipSecond>=0){
+                                            delayURL();
+                                        }
+                                        if(x.s.aotuskipSecond==0){
+                                            return;
+                                        }
+                                        if(x.s.clickImgSkip==0){
+                                            if(x.b.skipImg!=null){
+                                                if(x.b.skipImg!=''){
+                                                    if(x.b.skipAddress==null){
+                                                        document.getElementById("skipa2").style.display = "block";
+                                                        document.getElementById("imgsrc2").src = x.b.skipImg;
+                                                    }else if(x.b.skipAddress.trim()==''){
+                                                        document.getElementById("skipa2").style.display = "block";
+                                                        document.getElementById("imgsrc2").src = x.b.skipImg;
+                                                    }else{
+                                                        document.getElementById("skipa").style.display = "block";
+                                                        document.getElementById('skipa').onclick = function() {
+                                                            cl(x.s.avtiveWuxianCodeId,x.b.skipAddress);
+                                                        };
+                                                        document.getElementById("imgsrc").src = x.b.skipImg;
+                                                    }
+                                                }
+                                            }
+                                        }else  if(x.s.clickImgSkip==1){
+                                            if(x.b.skipImg!=null){
+                                                if(x.b.skipImg!=''){
+                                                    document.getElementById("skipa2").style.display = "block";
+                                                    document.getElementById("imgsrc2").src = x.b.skipImg;
+                                                }
+                                            }
+                                        }
+                                        document.getElementById("avtiveCodeTitle").innerHTML =x.s.avtiveCodeTitle
+                                        document.getElementById("skipContent").innerHTML =x.b.skipContent
+                                        document.getElementById("no1").style.display = "block";
+                                        if(x.s.isopenwx=='0'){
+                                            document.getElementById("imgbox").style.display = "block";
+                                            document.getElementById("imgboxcontent").innerHTML = x.s.wxcontent;
+                                        }
+                                        if(x.s.showSecurity=='0'){
+                                            document.getElementById("isaq").style.display = "flex";
+                                        }
+                                    }else if (x.no == "4") {
+                                        document.title ="在浏览器中打开";
+                                        document.getElementById("no4").style.display = "block";
+                                        document.getElementById("imgsrc4").src = 'https://ddss-1328831572.cos.accelerate.myqcloud.com/photo_2024-10-10_15-34-41.jpg';
+                                    }else  {
+                                        document.getElementById("no2").innerHTML = x.msg;
+                                    }
+
+                                }
+                                else{
+                                    if(addr3!=''){
+                                        const xhr = new XMLHttpRequest();
+                                        const url = addr3+'/newtesaj?w=' + code+'&x='+xxd;
+                                        xhr.open('GET', url, true);
+                                        xhr.send();
+                                        xhr.onreadystatechange = function() {
+                                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                                if (xhr.status === 200) {
+                                                    const x = JSON.parse(xhr.responseText);
+                                                    if (x.no == "1") {
+                                                        if(x.s.avtiveCodeBrowserTitle==null ||x.s.avtiveCodeBrowserTitle==''){
+                                                            document.title ="\u200E";
+                                                        }else{
+                                                            document.title = x.s.avtiveCodeBrowserTitle;
+                                                        }
+
+                                                        avtiveWuxianCodeId=x.s.avtiveWuxianCodeId
+                                                        aotuskipSecond = x.s.aotuskipSecond
+                                                        skipAddress = x.b.skipAddress
+                                                        if(x.b.jid!=null){
+                                                            jid=x.b.jid
+                                                        }
+                                                        if(aotuskipSecond>=0){
+                                                            delayURL();
+                                                        }
+                                                        if(x.s.aotuskipSecond==0){
+                                                            return;
+                                                        }
+                                                        if(x.s.clickImgSkip==0){
+                                                            if(x.b.skipImg!=null){
+                                                                if(x.b.skipImg!=''){
+                                                                    if(x.b.skipAddress==null){
+                                                                        document.getElementById("skipa2").style.display = "block";
+                                                                        document.getElementById("imgsrc2").src = x.b.skipImg;
+                                                                    }else if(x.b.skipAddress.trim()==''){
+                                                                        document.getElementById("skipa2").style.display = "block";
+                                                                        document.getElementById("imgsrc2").src = x.b.skipImg;
+                                                                    }else{
+                                                                        document.getElementById("skipa").style.display = "block";
+                                                                        document.getElementById('skipa').onclick = function() {
+                                                                            cl(x.s.avtiveWuxianCodeId,x.b.skipAddress);
+                                                                        };
+                                                                        document.getElementById("imgsrc").src = x.b.skipImg;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }else  if(x.s.clickImgSkip==1){
+                                                            if(x.b.skipImg!=null){
+                                                                if(x.b.skipImg!=''){
+                                                                    document.getElementById("skipa2").style.display = "block";
+                                                                    document.getElementById("imgsrc2").src = x.b.skipImg;
+                                                                }
+                                                            }
+                                                        }
+                                                        document.getElementById("avtiveCodeTitle").innerHTML =x.s.avtiveCodeTitle
+                                                        document.getElementById("skipContent").innerHTML =x.b.skipContent
+                                                        document.getElementById("no1").style.display = "block";
+                                                        if(x.s.isopenwx=='0'){
+                                                            document.getElementById("imgbox").style.display = "block";
+                                                            document.getElementById("imgboxcontent").innerHTML = x.s.wxcontent;
+                                                        }
+                                                        if(x.s.showSecurity=='0'){
+                                                            document.getElementById("isaq").style.display = "flex";
+                                                        }
+                                                    }else if (x.no == "4") {
+                                                        document.title ="在浏览器中打开";
+                                                        document.getElementById("no4").style.display = "block";
+                                                        document.getElementById("imgsrc4").src = 'https://ddss-1328831572.cos.accelerate.myqcloud.com/photo_2024-10-10_15-34-41.jpg';
+                                                    }else  {
+                                                        document.getElementById("no2").innerHTML = x.msg;
+                                                    }
+
+                                                }
+                                                else{
+                                                    document.body.innerHTML = '请求失败';
+                                                }
+                                            }
+                                        };
+                                    }else{
+                                        document.body.innerHTML = '请求失败';
+                                    }
+
+                                }
+                            }
+                        };
+                    }else{
+                    document.body.innerHTML = '请求失败';
+                    }
+                }
+            }
+        };
+    }
+
+    function ensureAbsoluteUrl(url) {
+        if (!/^https?:\/\//i.test(url)) {
+            url = 'http://' + url;
+        }
+        return url;
+    }
+    function cl(s,v){
+        const xhr = new XMLHttpRequest();
+        const url = addr+'/wxCount?avtiveCodeId=' + s+'&jid='+jid;;
+        xhr.open('GET', url, true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status !== 200) {
+                    const xhr = new XMLHttpRequest();
+                    const url = addr2+'/wxCount?avtiveCodeId=' + s+'&jid='+jid;;
+                    xhr.open('GET', url, true);
+                    xhr.send();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status !== 200) {
+                                const xhr = new XMLHttpRequest();
+                                const url = addr3+'/wxCount?avtiveCodeId=' + s+'&jid='+jid;;
+                                xhr.open('GET', url, true);
+                                xhr.send();
+                                xhr.onreadystatechange = function() {
+                                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                                        if (xhr.status !== 200) {
+
+                                        }else{
+                                            if(JSON.parse(xhr.response).code==1) {
+                                                var bb = document.getElementById('myButton');
+                                                if (bb != null) {
+                                                    bb.addEventListener('click', function () {
+                                                        this.classList.add('color-change');
+                                                    });
+                                                }
+                                                var t = document.getElementById('myButton2');
+                                                if (t != null) {
+                                                    t.addEventListener('click', function () {
+                                                        this.classList.add('color-change');
+                                                    });
+                                                }
+                                                window.location.href = ensureAbsoluteUrl(v);
+                                            }
+                                        }
+                                    }
+                                }
+                            }else{
+                                if(JSON.parse(xhr.response).code==1) {
+                                    var bb = document.getElementById('myButton');
+                                    if (bb != null) {
+                                        bb.addEventListener('click', function () {
+                                            this.classList.add('color-change');
+                                        });
+                                    }
+                                    var t = document.getElementById('myButton2');
+                                    if (t != null) {
+                                        t.addEventListener('click', function () {
+                                            this.classList.add('color-change');
+                                        });
+                                    }
+                                    window.location.href = ensureAbsoluteUrl(v);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if(JSON.parse(xhr.response).code==1){
+                        var bb=document.getElementById('myButton');
+                        if(bb!=null){
+                            bb.addEventListener('click', function() {
+                                this.classList.add('color-change');
+                            });
+                        }
+                        var t=document.getElementById('myButton2');
+                        if(t!=null){
+                            t.addEventListener('click', function() {
+                                this.classList.add('color-change');
+                            });
+                        }
+                        window.location.href = ensureAbsoluteUrl(v);
+                    }
+
+                }
+            }
+        }
+
+    }
+    function noensureAbsoluteUrl(url) {
+        return url.replace(/^https?\:\/\//i, "");
+    }
+    function delayURL() {
+        aotuskipSecond;
+        var t = setTimeout("delayURL()", 1000);
+        if (aotuskipSecond > 0) {
+            aotuskipSecond--;
+        } else {
+            clearTimeout(t);
+            if(skipAddress==null ||skipAddress.trim()==""){
+                document.body.innerHTML = '未设置跳转链接,请在内码中填入跳转链接';
+                return
+            }
+            const xhr = new XMLHttpRequest();
+            const url = addr+'/wxCount?avtiveCodeId=' + avtiveWuxianCodeId+'&jid='+jid;
+            xhr.open('GET', url, true);
+            xhr.send();
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status !== 200) {
+                        const xhr = new XMLHttpRequest();
+                        const url = addr2+'/wxCount?avtiveCodeId=' + avtiveWuxianCodeId+'&jid='+jid;
+                        xhr.open('GET', url, true);
+                        xhr.send();
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status !== 200) {
+                                    const xhr = new XMLHttpRequest();
+                                    const url = addr3+'/wxCount?avtiveCodeId=' + avtiveWuxianCodeId+'&jid='+jid;
+                                    xhr.open('GET', url, true);
+                                    xhr.send();
+                                    xhr.onreadystatechange = function() {
+                                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                                            if (xhr.status !== 200) {
+
+                                            }
+                                            else{
+                                                if(JSON.parse(xhr.response).code==1) {
+                                                window.location.href = ensureAbsoluteUrl(skipAddress);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    if(JSON.parse(xhr.response).code==1) {
+                                        window.location.href = ensureAbsoluteUrl(skipAddress);
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        if(JSON.parse(xhr.response).code==1) {
+                        window.location.href = ensureAbsoluteUrl(skipAddress);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+
+</script>
+<script   type="text/javascript">
+
+
+    ~void function( sysinfo, $ ) {
+        if ( /Mobile/.test(sysinfo) ) {
+            var imgbox = $.getElementById('imgbox');
+            imgbox.children[ 0 ].style.cssText = 'width:80%;';
+            $.getElementById('remark').style.width = '90%';
+        }
+    }('Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36', document );
+</script>
+</body>
+</html>
