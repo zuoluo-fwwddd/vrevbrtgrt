@@ -1,0 +1,19 @@
+name: Verify
+on:
+  push:
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node --check server.mjs
+      - run: node --check frontend-server.mjs
+      - run: node --check store-extra.js
+      - run: node --check admin-extra.js
+      - run: node verify-frontend.mjs
+      - run: node verify-api.mjs
+      - run: node verify-telegram-bot.mjs
