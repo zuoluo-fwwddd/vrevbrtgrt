@@ -35,6 +35,7 @@ try{
  const purchase=await request('/api/orders','POST',{productId:submitted.data.id,requestKey:'b1b2c3d4-1111-4222-8333-aabbccddeeff'},user);check(purchase.status===201&&purchase.data.amount===10,'Point purchase failed');
  const replay=await request('/api/orders','POST',{productId:submitted.data.id,requestKey:'b1b2c3d4-1111-4222-8333-aabbccddeeff'},user);check(replay.status===200&&replay.data.replayed,'Duplicate purchase was not idempotent');
  const finalMe=await request('/api/me','GET',undefined,user);check(finalMe.data.balance===40,'Balance does not match confirmed top-up minus purchase');
- console.log('PASS API acceptance: role registration and access, review gating, confirmed top-up, idempotent point purchase, balance and ledger');
+ const logout=await request('/api/logout','POST',{},user),revoked=await request('/api/me','GET',undefined,user);check(logout.status===200&&revoked.status===401,'Logout did not revoke the server-side session');
+ console.log('PASS API acceptance: role registration and access, review gating, confirmed top-up, idempotent point purchase, balance, ledger and session revocation');
 }catch(e){console.error(e);process.exitCode=1}finally{setTimeout(()=>process.exit(process.exitCode||0),50)}
 
