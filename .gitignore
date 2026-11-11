@@ -1,0 +1,15 @@
+.local-website-processes.json
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.sqlite-shm
+*.sqlite-wal
+.env
+.env.*
+!.env.example
+node_modules/
+/release-output/
+/github-test-release.zip
+
